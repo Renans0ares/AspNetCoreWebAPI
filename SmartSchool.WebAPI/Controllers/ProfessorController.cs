@@ -50,7 +50,7 @@ namespace SmartSchool.WebAPI.Controllers
             return Ok(Professor);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public IActionResult Put(int id, Professor Professor)
         {
             var prof = _context.Professores.AsNoTracking().FirstOrDefault(a => a.Id == id);
@@ -61,7 +61,7 @@ namespace SmartSchool.WebAPI.Controllers
             return Ok(Professor);
         }
 
-        [HttpPatch]
+        [HttpPatch("{id}")]
         public IActionResult Patch(int id, Professor Professor)
         {
             var prof = _context.Professores.AsNoTracking().FirstOrDefault(a => a.Id == id);
