@@ -68,22 +68,28 @@ namespace SmartSchool.WebAPI.Controllers
         public IActionResult Patch(int id, Professor professor)
         {
             var prof = _repo.GetAllProfessoresById(id,false);
-            if(prof == null) return BadRequest("Professor não encontrado");
-
+            
             _repo.Update(professor);
-            _repo.SaveChanges();
-            return Ok(professor);
+            if(_repo.SaveChanges())
+            {
+                return Ok(professor);
+
+            };
+            return BadRequest("Professor não encontrado");
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             var prof = _repo.GetAllProfessoresById(id, false);
-            if(prof == null) return BadRequest("Professor não encontrado");
             
-            _repo.Delete(prof);
-            _repo.SaveChanges();
-            return Ok();
+            _repo.Update(prof);
+            if(_repo.SaveChanges())
+            {
+                return Ok("Professor deletado!");
+
+            };
+            return BadRequest("Professor não encontrado");
         }
     }
 }
