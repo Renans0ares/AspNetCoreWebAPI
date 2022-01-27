@@ -23,7 +23,7 @@ namespace SmartSchool.WebAPI.Controllers
             return Ok(result);
         }
 
-        [HttpGet("byId/{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
             var Professor = _repo.GetAllProfessoresById(id,false);
@@ -60,8 +60,11 @@ namespace SmartSchool.WebAPI.Controllers
             if(prof == null) return BadRequest("Professor não encontrado");
 
             _repo.Update(professor);
-            _repo.SaveChanges();
-            return Ok(professor);
+            if(_repo.SaveChanges())
+            {
+                return Ok(professor);
+            }
+            return BadRequest("Professor não encontrado");
         }
 
         [HttpPatch("{id}")]
@@ -73,7 +76,6 @@ namespace SmartSchool.WebAPI.Controllers
             if(_repo.SaveChanges())
             {
                 return Ok(professor);
-
             };
             return BadRequest("Professor não encontrado");
         }
@@ -82,12 +84,12 @@ namespace SmartSchool.WebAPI.Controllers
         public IActionResult Delete(int id)
         {
             var prof = _repo.GetAllProfessoresById(id, false);
+            if(prof == null) return BadRequest("Professor não encontrado");
             
             _repo.Update(prof);
             if(_repo.SaveChanges())
             {
                 return Ok("Professor deletado!");
-
             };
             return BadRequest("Professor não encontrado");
         }
